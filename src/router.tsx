@@ -59,6 +59,7 @@ const AdminAuditPage = lazy(() => import("@/features/admin/AdminAuditPage"));
 const AdminSettingsPage = lazy(() => import("@/features/admin/AdminSettingsPage"));
 
 const NotFoundPage = lazy(() => import("@/features/misc/NotFoundPage"));
+const AboutPage = lazy(() => import("@/features/misc/AboutPage"));
 
 function Lazy({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<FullScreenLoader label="Loading page…" />}>{children}</Suspense>;
@@ -110,6 +111,7 @@ export const router = createBrowserRouter([
       { path: "/calendar", element: <Lazy><CalendarPage /></Lazy> },
       { path: "/support", element: <Lazy><SupportPage /></Lazy> },
       { path: "/settings", element: <Lazy><SettingsPage /></Lazy> },
+      { path: "/about", element: <Lazy><AboutPage /></Lazy> },
       {
         path: "/admin",
         element: (

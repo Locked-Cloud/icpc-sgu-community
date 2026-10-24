@@ -54,6 +54,7 @@ export const STUDENT_NAV: NavItem[] = [
   { to: "/calendar", label: "Calendar", icon: CalendarDays },
   { to: "/support", label: "Support", icon: LifeBuoy },
   { to: "/settings", label: "Settings", icon: Settings },
+  { to: "/about", label: "About", icon: ShieldCheck },
 ];
 
 export const ADMIN_NAV: { section: string; items: NavItem[] }[] = [

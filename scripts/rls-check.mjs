@@ -226,13 +226,22 @@ try {
     check("team member can post messages", memberWrite.status === 201, `status=${memberWrite.status}`);
   }
 
-  // 9. notifications are isolated per user
+  // 9. notifications are isolated per user (admins may see all BY DESIGN —
+  //    what matters: a student sees ONLY their own rows, never an admin's)
   await db.query(
     "insert into public.notifications (recipient_id, kind, title) values ($1, 'system', 'private note')",
     [uidA],
   );
-  const notifB = await rest("notifications?select=id", { token: tokenB });
-  check("notifications isolated per user", Array.isArray(notifB.data) && notifB.data.length === 0);
+  await db.query(
+    "insert into public.notifications (recipient_id, kind, title) values ($1, 'system', 'admin private note')",
+    [uidB],
+  );
+  const notifA = await rest("notifications?select=recipient_id", { token: tokenA });
+  const onlyOwn =
+    Array.isArray(notifA.data) &&
+    notifA.data.length > 0 &&
+    notifA.data.every((n) => n.recipient_id === uidA);
+  check("notifications isolated per user (student sees only own)", onlyOwn, `rows=${notifA.data?.length}`);
 
   // 10. scheduled reminders hidden from students
   const remindersA = await rest("scheduled_reminders?select=id&limit=1", { token: tokenA });

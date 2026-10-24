@@ -221,7 +221,8 @@ const week3 = await ensureWeek(3, "Week 3 — Dynamic Programming Intro", "draft
 });
 
 async function ensureResource(weekId, title, kind, url, order) {
-  if ((await q(`select 1 from public.training_resources where week_id = $1 and title = $2`, [weekId, title])).rows[0]) return null;
+  const existing = (await q(`select id from public.training_resources where week_id = $1 and title = $2`, [weekId, title])).rows[0]?.id;
+  if (existing) return existing;
   return (await q(`insert into public.training_resources (week_id, title, kind, url, sort_order) values ($1,$2,$3,$4,$5) returning id`, [weekId, title, kind, url, order])).rows[0].id;
 }
 const w2res = [
@@ -232,7 +233,8 @@ const w2res = [
 
 // Past session (for attendance) + upcoming week-2 session
 async function ensureSession(title, startsAt, endsAt, loc, weekId, mentorKey = null) {
-  if ((await q(`select 1 from public.training_sessions where title = $1`, [title])).rows[0]) return null;
+  const existing = (await q(`select id from public.training_sessions where title = $1`, [title])).rows[0]?.id;
+  if (existing) return existing;
   return (await q(
     `insert into public.training_sessions (title, description, starts_at, ends_at, location, week_id, mentor_id)
      values ($1,$2,$3,$4,$5,$6,$7) returning id`,
@@ -575,7 +577,7 @@ await q(
 );
 
 async function ensureBooking(key, topic, startsAt, hours, status, extra = {}) {
-  if ((await q(`select 1 from public.mentor_bookings where mentor_id = $1 and student_id = $2 and starts_at = $3`, [mentorRowId, ids[key], startsAt])).rows[0]) return null;
+  if ((await q(`select 1 from public.mentor_bookings where mentor_id = $1 and student_id = $2 and topic = $3`, [mentorRowId, ids[key], topic])).rows[0]) return null;
   return (await q(
     `insert into public.mentor_bookings (mentor_id, student_id, topic, description, related_topic, starts_at, ends_at, status, meeting_url, outcome_notes, cancel_reason, cancelled_by)
      values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning id`,
