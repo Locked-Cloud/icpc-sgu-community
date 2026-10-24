@@ -6,7 +6,7 @@
   "description": "ICPC SGU Community — Level 1 Management Platform (El-Saleheya El-Gadida University)",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node -e \"const fs=require('fs');fs.copyFileSync('vercel.json','dist/vercel.json');if(fs.existsSync('.vercel'))fs.cpSync('.vercel','dist/.vercel',{recursive:true})\"",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "test": "vitest run",
