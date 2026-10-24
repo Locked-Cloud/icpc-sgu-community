@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Environment — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+
+# Test artifacts
+coverage/
+
+# Supabase local temp
+supabase/.temp/
+
+.vercel
+.env*
+
+# local tooling
+.mimosa/
+
+.zcode/
